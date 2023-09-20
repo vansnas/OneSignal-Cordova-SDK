@@ -36,9 +36,9 @@ import com.onesignal.OSNotification;
 import com.onesignal.OSPermissionObserver;
 import com.onesignal.OSSubscriptionObserver;
 import com.onesignal.OneSignal;
-import com.onesignal.OneSignal.InAppMessageClickHandler;
-import com.onesignal.OneSignal.NotificationOpenedHandler;
-import com.onesignal.OneSignal.NotificationReceivedHandler;
+//import com.onesignal.OneSignal.InAppMessageClickHandler;
+//import com.onesignal.OneSignal.NotificationOpenedHandler;
+//import com.onesignal.OneSignal.NotificationReceivedHandler;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -112,7 +112,7 @@ public class OneSignalPush extends CordovaPlugin {
   private static CallbackContext jsSubscriptionObserverCallBack;
   private static CallbackContext jsEmailSubscriptionObserverCallBack;
 
-  private static OSPermissionObserver permissionObserver;
+  /*private static OSPermissionObserver permissionObserver;*/
   private static OSSubscriptionObserver subscriptionObserver;
   private static OSEmailSubscriptionObserver emailSubscriptionObserver;
 

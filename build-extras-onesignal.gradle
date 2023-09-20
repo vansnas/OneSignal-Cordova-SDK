@@ -5,6 +5,12 @@ android.defaultConfig {
   ]
 }
 
+android {
+    configurations {
+        all*.exclude group: 'com.onesignal', module: 'onesignal'
+    }
+}
+
 repositories {
     maven { url 'https://maven.google.com' }
     repositories {

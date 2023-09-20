@@ -112,7 +112,7 @@ public class OneSignalPush extends CordovaPlugin {
   private static CallbackContext jsSubscriptionObserverCallBack;
   private static CallbackContext jsEmailSubscriptionObserverCallBack;
 
-  private static OSPermissionObserver permissionObserver;
+  /*private static OSPermissionObserver permissionObserver;*/
   private static OSSubscriptionObserver subscriptionObserver;
   private static OSEmailSubscriptionObserver emailSubscriptionObserver;
 

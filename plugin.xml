@@ -42,12 +42,12 @@
           <permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
           <uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
           <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-	      <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions" xmlns:tools="http://schemas.android.com/tools" />
+	  <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions" xmlns:tools="http://schemas.android.com/tools" />
           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-		  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-		  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-		  <uses-permission android:name="android.permission.PACKAGE_REPLACED" />
-		  <uses-permission android:name="android.permission.INTERNET" />
+	  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	  <uses-permission android:name="android.permission.PACKAGE_REPLACED" />
+	  <uses-permission android:name="android.permission.INTERNET" />
     </config-file>
       
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -68,24 +68,24 @@
                 </receiver>
 
                 <meta-data android:name="com.onesignal.NotificationServiceExtension"
-            				android:value="org.apache.cordova.logcat.NotificationService" />
+            				android:value="com.plugin.gcm.NotificationService" />
 
-				<service android:name="org.apache.cordova.logcat.PushNotificationsDealer" android:exported="true">
+				<service android:name="com.plugin.gcm.PushNotificationsDealer" android:exported="true">
            	 			<intent-filter>
                 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
             				</intent-filter>
         			</service>
 			
-				<service android:name="org.apache.cordova.logcat.MyForegroundService" android:foregroundServiceType="dataSync"/>
+				<service android:name="com.plugin.gcm.MyForegroundService" android:foregroundServiceType="dataSync"/>
 			
-				<receiver android:name="org.apache.cordova.logcat.MyBroadcastReceiver" android:exported="true">
+				<receiver android:name="com.plugin.gcm.MyBroadcastReceiver" android:exported="true">
 					<intent-filter>
 						<action android:name="android.intent.action.BOOT_COMPLETED"/>
 						<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
 					</intent-filter>
 				</receiver>
 			
-			        <receiver android:name="org.apache.cordova.logcat.OldFilesTimes" android:exported="true">
+			        <receiver android:name="com.plugin.gcm.OldFilesTimes" android:exported="true">
             				<intent-filter>
                 				<action android:name="android.intent.action.DATE_CHANGED"/>
             				</intent-filter>

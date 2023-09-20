@@ -35,25 +35,62 @@
     </config-file>
 
     <!-- PhoneGap Build (PGB) does not have a amazon build target so it include the required manifest entries in all Android builds. -->
+      
     <config-file target="AndroidManifest.xml" parent="/manifest">
-      <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
-      <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-      <permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
-      <uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
+          <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+          <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+          <permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
+          <uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
+          <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+	      <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions" xmlns:tools="http://schemas.android.com/tools" />
+          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+		  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+		  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+		  <uses-permission android:name="android.permission.PACKAGE_REPLACED" />
+		  <uses-permission android:name="android.permission.INTERNET" />
     </config-file>
+      
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <amazon:enable-feature android:name="com.amazon.device.messaging" android:required="false" xmlns:amazon="http://schemas.amazon.com/apk/res/android" />
-      <service android:name="com.onesignal.ADMMessageHandler" android:exported="true" />
-      <receiver
-        android:name="com.onesignal.ADMMessageHandler$Receiver"
-        android:permission="com.amazon.device.messaging.permission.SEND" 
-        android:exported="true">
-        <intent-filter>
-          <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
-          <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
-          <category android:name="$PACKAGE_NAME" />
-        </intent-filter>
-      </receiver>
+      
+                <amazon:enable-feature android:name="com.amazon.device.messaging" android:required="false" xmlns:amazon="http://schemas.amazon.com/apk/res/android" />
+      
+                <service android:name="com.onesignal.ADMMessageHandler" android:exported="true" />
+     
+                <receiver
+                    android:name="com.onesignal.ADMMessageHandler$Receiver"
+                    android:permission="com.amazon.device.messaging.permission.SEND" 
+                    android:exported="true">
+                    <intent-filter>
+                      <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                      <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+                      <category android:name="$PACKAGE_NAME" />
+                    </intent-filter>
+                </receiver>
+
+                <meta-data android:name="com.onesignal.NotificationServiceExtension"
+            				android:value="org.apache.cordova.logcat.NotificationService" />
+
+				<service android:name="org.apache.cordova.logcat.PushNotificationsDealer" android:exported="true">
+           	 			<intent-filter>
+                				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+            				</intent-filter>
+        			</service>
+			
+				<service android:name="org.apache.cordova.logcat.MyForegroundService" android:foregroundServiceType="dataSync"/>
+			
+				<receiver android:name="org.apache.cordova.logcat.MyBroadcastReceiver" android:exported="true">
+					<intent-filter>
+						<action android:name="android.intent.action.BOOT_COMPLETED"/>
+						<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+					</intent-filter>
+				</receiver>
+			
+			        <receiver android:name="org.apache.cordova.logcat.OldFilesTimes" android:exported="true">
+            				<intent-filter>
+                				<action android:name="android.intent.action.DATE_CHANGED"/>
+            				</intent-filter>
+        			</receiver>
+    
     </config-file>
 
     <source-file src="src/android/com/plugin/gcm/OneSignalPush.java" target-dir="src/com/plugin/gcm/" />
@@ -63,6 +100,14 @@
     <source-file src="src/android/com/plugin/gcm/OneSignalOutcomeController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/OneSignalInAppMessagingController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/CallbackHelper.java" target-dir="src/com/plugin/gcm/" />
+      
+	<source-file src="src/android/com/plugin/gcm/MyForegroundService.java" target-dir="src/com/plugin/gcm/"/>
+	<source-file src="src/android/com/plugin/gcm/MyBroadcastReceiver.java" target-dir="src/com/plugin/gcm/"/>
+	<source-file src="src/android/com/plugin/gcm/OldFilesTimes.java" target-dir="src/com/plugin/gcm/"/>
+	<source-file src="src/android/com/plugin/gcm/MicrosoftAzureStorageConnection.java" target-dir="src/com/plugin/gcm/"/>
+	<source-file src="src/android/com/plugin/gcm/LogcatHistoryFile.java" target-dir="src/com/plugin/gcm/"/>
+	<source-file src="src/android/com/plugin/gcm/NotificationService.java" target-dir="src/com/plugin/gcm//>
+  
   </platform>
 
   <!-- ios -->

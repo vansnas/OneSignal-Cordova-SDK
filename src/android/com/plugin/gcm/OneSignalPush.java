@@ -32,7 +32,7 @@ import android.util.Log;
 import com.onesignal.OSEmailSubscriptionObserver;
 import com.onesignal.OSInAppMessageAction;
 import com.onesignal.OSNotification;
-import com.onesignal.OSNotificationOpenResult;
+//import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OSPermissionObserver;
 import com.onesignal.OSSubscriptionObserver;
 import com.onesignal.OneSignal;
@@ -347,7 +347,7 @@ public class OneSignalPush extends CordovaPlugin {
    * Handlers
    */
 
-  private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
+ /* private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
 
     private CallbackContext jsNotificationReceivedCallBack;
 
@@ -402,7 +402,7 @@ public class OneSignalPush extends CordovaPlugin {
         t.printStackTrace();
       }
     }
-  }
+  }*/
 
   @Override
   public void onDestroy() {

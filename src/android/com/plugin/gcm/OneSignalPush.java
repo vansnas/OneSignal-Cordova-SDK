@@ -32,13 +32,13 @@ import android.util.Log;
 import com.onesignal.OSEmailSubscriptionObserver;
 import com.onesignal.OSInAppMessageAction;
 import com.onesignal.OSNotification;
-import com.onesignal.OSNotificationOpenResult;
-import com.onesignal.OSPermissionObserver;
+//import com.onesignal.OSNotificationOpenResult;
+//import com.onesignal.OSPermissionObserver;
 import com.onesignal.OSSubscriptionObserver;
 import com.onesignal.OneSignal;
-import com.onesignal.OneSignal.InAppMessageClickHandler;
+/*import com.onesignal.OneSignal.InAppMessageClickHandler;
 import com.onesignal.OneSignal.NotificationOpenedHandler;
-import com.onesignal.OneSignal.NotificationReceivedHandler;
+import com.onesignal.OneSignal.NotificationReceivedHandler;*/
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -116,7 +116,7 @@ public class OneSignalPush extends CordovaPlugin {
   private static OSSubscriptionObserver subscriptionObserver;
   private static OSEmailSubscriptionObserver emailSubscriptionObserver;
 
-  public static boolean setNotificationReceivedHandler(CallbackContext callbackContext) {
+  /*public static boolean setNotificationReceivedHandler(CallbackContext callbackContext) {
     notifReceivedCallbackContext = callbackContext;
     return true;
   }
@@ -129,7 +129,7 @@ public class OneSignalPush extends CordovaPlugin {
   public static boolean setInAppMessageClickHandler(CallbackContext callbackContext) {
     inAppMessageClickedCallbackContext = callbackContext;
     return true;
-  }
+  }*/
 
   public boolean init(CallbackContext callbackContext, JSONArray data) {
     try {
@@ -174,7 +174,7 @@ public class OneSignalPush extends CordovaPlugin {
 
     try{
       switch(action) {
-        case SET_NOTIFICATION_OPENED_HANDLER:
+        /*case SET_NOTIFICATION_OPENED_HANDLER:
           result = setNotificationOpenedHandler(callbackContext);
           break;
 
@@ -184,25 +184,25 @@ public class OneSignalPush extends CordovaPlugin {
 
         case SET_IN_APP_MESSAGE_CLICK_HANDLER:
           result = setInAppMessageClickHandler(callbackContext);
-          break;
+          break;*/
 
         case INIT:
           result = init(callbackContext, data);
           break;
 
-        case SET_IN_FOCUS_DISPLAYING:
+        /*case SET_IN_FOCUS_DISPLAYING:
           result = OneSignalController.setInFocusDisplaying(data);
           break;
 
         case ADD_PERMISSION_OBSERVER:
           result = OneSignalObserverController.addPermissionObserver(callbackContext);
-          break;
+          break;*/
 
         case ADD_SUBSCRIPTION_OBSERVER:
           result = OneSignalObserverController.addSubscriptionObserver(callbackContext);
           break;
         
-        case REMOVE_SUBSCRIPTION_OBSERVER:
+        /*case REMOVE_SUBSCRIPTION_OBSERVER:
           result = OneSignalObserverController.removeSubscriptionObserver(callbackContext);
           break;
 
@@ -328,7 +328,7 @@ public class OneSignalPush extends CordovaPlugin {
 
         case SEND_OUTCOME_WITH_VALUE:
           result = OneSignalOutcomeController.sendOutcomeWithValue(callbackContext, data);
-          break;
+          break;*/
 
         default:
           Log.e(TAG, "Invalid action : " + action);
@@ -346,7 +346,7 @@ public class OneSignalPush extends CordovaPlugin {
   /**
    * Handlers
    */
-
+/*
   private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
 
     private CallbackContext jsNotificationReceivedCallBack;
@@ -410,3 +410,4 @@ public class OneSignalPush extends CordovaPlugin {
     OneSignal.removeNotificationReceivedHandler();
   }
 }
+*/

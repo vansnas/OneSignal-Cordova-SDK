@@ -27,7 +27,7 @@
 
   <platform name="android">
 
-    <framework src="com.onesignal:OneSignal:[4.0.0, 4.99.99]" /><!--  -->
+    <framework src="com.onesignal:OneSignal:[4.8.6]" /><!--  -->
     <framework src="build-extras-onesignal.gradle" custom="true" type="gradleReference" />
 
     <config-file target="res/xml/config.xml" parent="/*">
@@ -96,10 +96,10 @@
     </config-file>
 
     <source-file src="src/android/com/plugin/gcm/OneSignalPush.java" target-dir="src/com/plugin/gcm/" />
-    <!-- <source-file src="src/android/com/plugin/gcm/OneSignalController.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/OneSignalController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/OneSignalOutcomeController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/OneSignalInAppMessagingController.java" target-dir="src/com/plugin/gcm/" />
-    <source-file src="src/android/com/plugin/gcm/OneSignalEmailController.java" target-dir="src/com/plugin/gcm/" /> -->
+    <source-file src="src/android/com/plugin/gcm/OneSignalEmailController.java" target-dir="src/com/plugin/gcm/" /> 
     <source-file src="src/android/com/plugin/gcm/OneSignalObserverController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/CallbackHelper.java" target-dir="src/com/plugin/gcm/" />
       

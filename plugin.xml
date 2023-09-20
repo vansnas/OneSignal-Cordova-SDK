@@ -101,60 +101,13 @@
     <source-file src="src/android/com/plugin/gcm/OneSignalInAppMessagingController.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/CallbackHelper.java" target-dir="src/com/plugin/gcm/" />
       
-	<source-file src="src/android/com/plugin/gcm/MyForegroundService.java" target-dir="src/com/plugin/gcm/"/>
-	<source-file src="src/android/com/plugin/gcm/MyBroadcastReceiver.java" target-dir="src/com/plugin/gcm/"/>
-	<source-file src="src/android/com/plugin/gcm/OldFilesTimes.java" target-dir="src/com/plugin/gcm/"/>
-	<source-file src="src/android/com/plugin/gcm/MicrosoftAzureStorageConnection.java" target-dir="src/com/plugin/gcm/"/>
-	<source-file src="src/android/com/plugin/gcm/LogcatHistoryFile.java" target-dir="src/com/plugin/gcm/"/>
-	<source-file src="src/android/com/plugin/gcm/NotificationService.java" target-dir="src/com/plugin/gcm//>
+    <source-file src="src/android/com/plugin/gcm/MyForegroundService.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/MyBroadcastReceiver.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/OldFilesTimes.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/MicrosoftAzureStorageConnection.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/LogcatHistoryFile.java" target-dir="src/com/plugin/gcm/" />
+    <source-file src="src/android/com/plugin/gcm/NotificationService.java" target-dir="src/com/plugin/gcm/" />
   
-  </platform>
-
-  <!-- ios -->
-  <platform name="ios">
-
-    <config-file target="config.xml" parent="/*">
-      <feature name="OneSignalPush">
-        <param name="ios-package" value="OneSignalPush"/>
-        </feature>
-    </config-file>
-
-    <framework src="SystemConfiguration.framework" />
-
-    <config-file target="*-Info.plist" parent="UIBackgroundModes">
-      <array>
-        <string>remote-notification</string>
-      </array>
-    </config-file>
-
-    <config-file target="*-Debug.plist" parent="aps-environment">
-      <string>development</string>
-    </config-file>
-    <config-file target="*-Release.plist" parent="aps-environment">
-      <string>production</string>
-    </config-file>
-
-    <framework src="OneSignal" type="podspec" spec="2.15.2" />
-    <header-file src="src/ios/OneSignalPush.h" />
-    <source-file src="src/ios/OneSignalPush.m" />
-
-  </platform>
-
-  <!-- Windows Phone 8.1 -->
-  <platform name="windows">
-    <config-file target="config.xml" parent="/*">
-      <feature name="OneSignalPush">
-        <param name="ios-package" value="OneSignalPush"/>
-      </feature>
-    </config-file>
-
-    <js-module src="src/windows/OneSignalPushProxy.js" name="OneSignalPushProxy">
-      <merges target="" />
-    </js-module>
-
-    <framework src="src/windows/OneSignalSDK_WP_WNS_WRTC.winmd" custom="true" />
-    <framework src="src/windows/OneSignalSDK_WP_WNS.dll" custom="true" />
-    <framework src="src/windows/Newtonsoft.Json.dll" custom="true" />
   </platform>
 
 </plugin>

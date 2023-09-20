@@ -408,6 +408,6 @@ public class OneSignalPush extends CordovaPlugin {
   public void onDestroy() {
     OneSignal.removeNotificationOpenedHandler();
     OneSignal.removeNotificationReceivedHandler();
-  }
+  }*/
 }
-*/
+

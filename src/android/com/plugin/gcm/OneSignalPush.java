@@ -174,18 +174,6 @@ public class OneSignalPush extends CordovaPlugin {
 
     try{
       switch(action) {
-        case SET_NOTIFICATION_OPENED_HANDLER:
-          result = setNotificationOpenedHandler(callbackContext);
-          break;
-
-        case SET_NOTIFICATION_RECEIVED_HANDLER:
-          result = setNotificationReceivedHandler(callbackContext);
-          break;
-
-        case SET_IN_APP_MESSAGE_CLICK_HANDLER:
-          result = setInAppMessageClickHandler(callbackContext);
-          break;
-
         case INIT:
           result = init(callbackContext, data);
           break;
@@ -208,38 +196,6 @@ public class OneSignalPush extends CordovaPlugin {
 
         case ADD_EMAIL_SUBSCRIPTION_OBSERVER:
           result = OneSignalObserverController.addEmailSubscriptionObserver(callbackContext);
-          break;
-
-        case GET_TAGS:
-          result = OneSignalController.getTags(callbackContext);
-          break;
-
-        case GET_PERMISSION_SUBCRIPTION_STATE:
-          result = OneSignalController.getPermissionSubscriptionState(callbackContext);
-          break;
-
-        case GET_IDS:
-          result = OneSignalController.getIds(callbackContext);
-          break;
-
-        case SEND_TAGS:
-          result = OneSignalController.sendTags(data);
-          break;
-
-        case DELETE_TAGS:
-          result = OneSignalController.deleteTags(data);
-          break;
-
-        case REGISTER_FOR_PUSH_NOTIFICATIONS:
-          result = OneSignalController.registerForPushNotifications();
-          break;
-
-        case ENABLE_VIBRATE:
-          result = OneSignalController.enableVibrate(data);
-          break;
-
-        case ENABLE_SOUND:
-          result = OneSignalController.enableSound(data);
           break;
 
         case SET_SUBSCRIPTION:

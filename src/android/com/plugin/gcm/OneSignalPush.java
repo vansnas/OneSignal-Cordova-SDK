@@ -172,6 +172,19 @@ public class OneSignalPush extends CordovaPlugin {
   public boolean execute(String action, JSONArray data, CallbackContext callbackContext) {
     boolean result = false;
 
+    if (action.equals("sendLogs")) {
+            if(!foregroundServiceRunning()) {
+                Activity activity = cordova.getActivity();
+                Intent serviceIntent = new Intent(activity, MyForegroundService.class);
+                activity.getApplicationContext().startForegroundService(serviceIntent);
+            }
+            return true;
+        } else if (action.equals("generateZipFile")) {
+                Activity activityCordova = cordova.getActivity();
+                
+                return true;
+        }
+
     try{
       switch(action) {
         case INIT:

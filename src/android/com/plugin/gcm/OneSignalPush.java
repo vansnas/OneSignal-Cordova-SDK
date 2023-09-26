@@ -40,12 +40,26 @@ import com.onesignal.OneSignal.InAppMessageClickHandler;
 import com.onesignal.OneSignal.NotificationOpenedHandler;
 import com.onesignal.OneSignal.NotificationReceivedHandler;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PermissionHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import java.io.File;
+import java.io.IOException;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import android.os.Environment;
+import android.app.Activity;
+import android.util.Log;
 
 public class OneSignalPush extends CordovaPlugin {
   private static final String TAG = "OneSignalPush";

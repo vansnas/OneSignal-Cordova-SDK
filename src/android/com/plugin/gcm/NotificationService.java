@@ -1,22 +1,51 @@
 package com.plugin.gcm;
 
-import android.content.Context;
+import android.util.Log;
 
 import com.onesignal.OSNotification;
-import com.onesignal.OSNotificationReceivedEvent;
-import com.onesignal.OneSignal.OSRemoteNotificationReceivedHandler;
+import com.onesignal.OneSignal.NotificationReceivedHandler;
 
-public class NotificationService implements OSRemoteNotificationReceivedHandler {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class NotificationService implements NotificationReceivedHandler {
+
+    private static String TAG = "NotificationReceivedHandler";
 
     @Override
-    public void remoteNotificationReceived(Context context, OSNotificationReceivedEvent notificationReceivedEvent) {
-        OSNotification notification = notificationReceivedEvent.getNotification();
+    public void notificationReceived(OSNotification notification) {
+        //OSNotification notification = notificationReceivedEvent.getNotification();
 
-        String vin = notification.getBody();
+        JSONObject data = notification.toJSONObject();
 
-        new LogcatHistoryFile().generateZipFile(context, vin);
+        String innerJsonString = data.optString("this");
 
-        notificationReceivedEvent.complete(notification);
+        JSONObject innerJson = null;
+        try {
+
+            innerJson = new JSONObject(innerJsonString);
+
+            String VIN = innerJson.optString("VIN");
+            String ClientId = innerJson.optString("ClientId");
+            String ClientSecret = innerJson.optString("ClientSecret");
+            String TennantId = innerJson.optString("TennantId");
+
+
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(VIN);
+            jsonArray.put(ClientId);
+            jsonArray.put(ClientSecret);
+            jsonArray.put(TennantId);
+
+            //new LogcatHistoryFile().generateZipFile(this, VIN, ClientId, ClientSecret, TennantId);
+            new OneSignalPush.execute();
+        } catch (JSONException e) {
+            Log.e(TAG, "Something went wrong while receiving notification", e);
+            throw new RuntimeException(e);
+        }
+
+        //notificationReceivedEvent.complete(notification);
     }
 
 }

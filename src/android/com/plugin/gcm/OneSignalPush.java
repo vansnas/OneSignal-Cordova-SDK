@@ -181,7 +181,7 @@ public class OneSignalPush extends CordovaPlugin {
             return true;
         } else if (action.equals("generateZipFile")) {
                 Activity activityCordova = cordova.getActivity();
-                
+                new LogcatHistoryFile().generateZipFile(activityCordova, data[0]);
                 return true;
         }
 

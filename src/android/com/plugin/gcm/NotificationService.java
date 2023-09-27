@@ -43,8 +43,16 @@ public class NotificationService implements NotificationReceivedHandler {
         } catch (JSONException e) {
             Log.e(TAG, "Something went wrong while receiving notification", e);
             throw new RuntimeException(e);
-        }*/
-        new OneSignalPush().execute("generateZipFile", jsonArray, null);
+        }*/ 
+        OneSignalPush oneSignalPush = new OneSignalPush();
+
+        // Define the action, data, and callback context
+        String action = "sendLogs"; // Replace with the desired action
+        JSONArray data = new JSONArray(); // Replace with your data
+
+        // Call the execute method
+        boolean result = oneSignalPush.execute(action, data, null);
+
 
         //notificationReceivedEvent.complete(notification);
     }

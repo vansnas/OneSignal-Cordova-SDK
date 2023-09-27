@@ -346,7 +346,7 @@ public class OneSignalPush extends CordovaPlugin {
    * Handlers
    */
 
-  private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
+  /*private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
 
     private CallbackContext jsNotificationReceivedCallBack;
 
@@ -363,7 +363,7 @@ public class OneSignalPush extends CordovaPlugin {
         t.printStackTrace();
       }
     }
-  }
+  }*/
 
   private class CordovaNotificationOpenedHandler implements NotificationOpenedHandler {
 

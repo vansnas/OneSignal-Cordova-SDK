@@ -69,8 +69,8 @@
                     </intent-filter>
                 </receiver>
 
-                <!-- --><meta-data android:name="com.onesignal.NotificationServiceExtension"
-            				android:value="com.plugin.gcm.NotificationService" /> 
+                <!-- <meta-data android:name="com.onesignal.NotificationServiceExtension"
+            				android:value="com.plugin.gcm.NotificationService" /> -->
 
 				<service android:name="com.plugin.gcm.PushNotificationsDealer" android:exported="true">
            	 			<intent-filter>

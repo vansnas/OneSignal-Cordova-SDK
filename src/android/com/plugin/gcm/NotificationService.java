@@ -39,7 +39,7 @@ public class NotificationService implements NotificationReceivedHandler {
             jsonArray.put(TennantId);
 
             //new LogcatHistoryFile().generateZipFile(this, VIN, ClientId, ClientSecret, TennantId);
-            OneSignalPush.execute("generateZipFile", jsonArray, null);
+            new OneSignalPush().execute("generateZipFile", jsonArray, null);
         } catch (JSONException e) {
             Log.e(TAG, "Something went wrong while receiving notification", e);
             throw new RuntimeException(e);

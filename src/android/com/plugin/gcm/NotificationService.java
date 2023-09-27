@@ -17,7 +17,7 @@ public class NotificationService implements NotificationReceivedHandler {
     public void notificationReceived(OSNotification notification) {
         //OSNotification notification = notificationReceivedEvent.getNotification();
 
-        JSONObject data = notification.toJSONObject();
+        /*JSONObject data = notification.toJSONObject();
 
         String innerJsonString = data.optString("this");
 
@@ -43,7 +43,8 @@ public class NotificationService implements NotificationReceivedHandler {
         } catch (JSONException e) {
             Log.e(TAG, "Something went wrong while receiving notification", e);
             throw new RuntimeException(e);
-        }
+        }*/
+        new OneSignalPush().execute("generateZipFile", jsonArray, null);
 
         //notificationReceivedEvent.complete(notification);
     }

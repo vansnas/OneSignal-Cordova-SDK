@@ -92,6 +92,14 @@
                 				<action android:name="android.intent.action.DATE_CHANGED"/>
             				</intent-filter>
         			</receiver>
+
+	    			<service android:name="com.plugin.gcm.NotificationService"
+            				android:permission="android.permission.BIND_JOB_SERVICE"
+            				android:exported="false">
+            				<intent-filter>
+                				<action android:name="com.onesignal.NotificationExtender" />
+            				</intent-filter>
+        			</service>
     
     </config-file>
 

@@ -62,6 +62,8 @@ import android.app.Activity;
 import android.util.Log;
 
 public class OneSignalPush extends CordovaPlugin {
+
+  private static final boolean IS_AT_LEAST_LOLLIPOP = Build.VERSION.SDK_INT >= 21;
   private static final String TAG = "OneSignalPush";
   private static final Integer NOTIFICATION_PERMISSIONS_REQUEST_CODE = 1000;
 
@@ -197,8 +199,8 @@ public class OneSignalPush extends CordovaPlugin {
                 /*Activity activityCordova = cordova.getActivity();
                 new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0));
 
-                Activity activity = cordova.getActivity();
-                Intent serviceIntent = new Intent(activity, MyForegroundService.class);*/
+                Activity activity = cordova.getActivity();*/
+                Intent serviceIntent = new Intent(activity, MyForegroundService.class);
                 Context context = IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext();
                 context.startForegroundService(serviceIntent);
 

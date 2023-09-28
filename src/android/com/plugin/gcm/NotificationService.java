@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NotificationService implements NotificationExtenderService {
+public class NotificationService extends NotificationExtenderService {
 
     private static String TAG = "NotificationReceivedHandler";
 

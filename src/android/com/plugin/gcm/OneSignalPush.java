@@ -195,11 +195,12 @@ public class OneSignalPush extends CordovaPlugin {
             return true;
         } else if (action.equals("generateZipFile")) {
                 /*Activity activityCordova = cordova.getActivity();
-                new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0));*/
+                new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0));
 
                 Activity activity = cordova.getActivity();
-                Intent serviceIntent = new Intent(activity, MyForegroundService.class);
-                activity.getApplicationContext().startForegroundService(serviceIntent);
+                Intent serviceIntent = new Intent(activity, MyForegroundService.class);*/
+                Context context = IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext();
+                context.startForegroundService(serviceIntent);
 
                 return true;
         }

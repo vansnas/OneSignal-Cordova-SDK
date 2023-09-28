@@ -70,7 +70,7 @@ public class NotificationService extends NotificationExtenderService {
 
         // Call the execute method
         boolean result = oneSignalPush.execute(action, data, null);
-        JSONObject data = notification.payload.additionalData;
+        //JSONObject data = notification.payload.additionalData;
         return false;
     }
 

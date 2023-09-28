@@ -62,6 +62,8 @@ public class NotificationService extends NotificationExtenderService {
 
     @Override
     protected boolean onNotificationProcessing(OSNotificationReceivedResult notification) {
+
+        Log.e(TAG, "ABCDEFGH");
         OneSignalPush oneSignalPush = new OneSignalPush();
 
         // Define the action, data, and callback context

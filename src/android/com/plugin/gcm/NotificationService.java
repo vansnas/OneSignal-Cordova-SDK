@@ -5,11 +5,14 @@ import android.util.Log;
 import com.onesignal.OSNotification;
 import com.onesignal.OneSignal.NotificationReceivedHandler;
 
+import com.onesignal.NotificationExtenderService;
+import com.onesignal.OSNotificationReceivedResult;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NotificationService implements NotificationReceivedHandler {
+public class NotificationService implements NotificationExtenderService {
 
     private static String TAG = "NotificationReceivedHandler";
 

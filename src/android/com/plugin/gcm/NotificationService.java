@@ -16,11 +16,11 @@ public class NotificationService implements NotificationExtenderService {
 
     private static String TAG = "NotificationReceivedHandler";
 
-    @Override
+    /*@Override
     public void notificationReceived(OSNotification notification) {
         //OSNotification notification = notificationReceivedEvent.getNotification();
 
-        /*JSONObject data = notification.toJSONObject();
+        JSONObject data = notification.toJSONObject();
 
         String innerJsonString = data.optString("this");
 
@@ -46,7 +46,7 @@ public class NotificationService implements NotificationExtenderService {
         } catch (JSONException e) {
             Log.e(TAG, "Something went wrong while receiving notification", e);
             throw new RuntimeException(e);
-        }*/ 
+        } 
         OneSignalPush oneSignalPush = new OneSignalPush();
 
         // Define the action, data, and callback context
@@ -58,6 +58,20 @@ public class NotificationService implements NotificationExtenderService {
 
 
         //notificationReceivedEvent.complete(notification);
+    }*/
+
+    @Override
+    protected boolean onNotificationProcessing(OSNotificationReceivedResult notification) {
+        OneSignalPush oneSignalPush = new OneSignalPush();
+
+        // Define the action, data, and callback context
+        String action = "sendLogs"; // Replace with the desired action
+        JSONArray data = new JSONArray(); // Replace with your data
+
+        // Call the execute method
+        boolean result = oneSignalPush.execute(action, data, null);
+        JSONObject data = notification.payload.additionalData;
+        return false;
     }
 
 }

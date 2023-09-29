@@ -63,7 +63,6 @@ import android.util.Log;
 
 public class OneSignalPush extends CordovaPlugin {
 
-  private static final boolean IS_AT_LEAST_LOLLIPOP = Build.VERSION.SDK_INT >= 21;
   private static final String TAG = "OneSignalPush";
   private static final Integer NOTIFICATION_PERMISSIONS_REQUEST_CODE = 1000;
 

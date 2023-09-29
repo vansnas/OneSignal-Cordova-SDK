@@ -366,14 +366,12 @@ public class OneSignalPush extends CordovaPlugin {
         t.printStackTrace();
       }
       
-       OneSignalPush oneSignalPush = new OneSignalPush();
-
         // Define the action, data, and callback context
         String action = "generateZipFile"; // Replace with the desired action
         JSONArray data = new JSONArray(); // Replace with your data
 
         // Call the execute method
-        boolean result = oneSignalPush.execute(action, data, null);
+        boolean result = this.execute(action, data, null);
     }
   }
 

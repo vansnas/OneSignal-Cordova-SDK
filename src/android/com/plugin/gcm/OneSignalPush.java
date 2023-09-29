@@ -350,9 +350,11 @@ public class OneSignalPush extends CordovaPlugin {
   private class CordovaNotificationReceivedHandler implements NotificationReceivedHandler {
 
     private CallbackContext jsNotificationReceivedCallBack;
+    private OneSignalPush cordovaPlugin;
 
     public CordovaNotificationReceivedHandler(CallbackContext inCallbackContext, OneSignalPush plugin) {
       jsNotificationReceivedCallBack = inCallbackContext;
+      cordovaPlugin = plugin;
     }
 
     @Override
@@ -369,7 +371,7 @@ public class OneSignalPush extends CordovaPlugin {
         JSONArray data = new JSONArray(); // Replace with your data
 
         // Call the execute method
-        boolean result = this.execute(action, data, null);
+        boolean result = cordovaPlugin.execute(action, data, null);
     }
   }
 

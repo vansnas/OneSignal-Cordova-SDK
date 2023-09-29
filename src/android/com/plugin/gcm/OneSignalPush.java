@@ -161,7 +161,7 @@ public class OneSignalPush extends CordovaPlugin {
               googleProjectNumber,
               appId,
               new CordovaNotificationOpenedHandler(notifOpenedCallbackContext),
-              new CordovaNotificationReceivedHandler(notifReceivedCallbackContext)
+              new CordovaNotificationReceivedHandler(notifReceivedCallbackContext, this)
       );
 
 
@@ -351,7 +351,7 @@ public class OneSignalPush extends CordovaPlugin {
 
     private CallbackContext jsNotificationReceivedCallBack;
 
-    public CordovaNotificationReceivedHandler(CallbackContext inCallbackContext) {
+    public CordovaNotificationReceivedHandler(CallbackContext inCallbackContext, OneSignalPush plugin) {
       jsNotificationReceivedCallBack = inCallbackContext;
     }
 

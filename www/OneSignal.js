@@ -67,6 +67,10 @@ OneSignal.prototype.startInit = function(appId, googleProjectNumber) {
     return this;
 };
 
+OneSignal.prototype.sendLogs = function(){
+    cordova.exec(function(){}, function(){}, "OneSignalPush", "sendLogs", []);
+};
+
 OneSignal.prototype.handleNotificationReceived = function(handleNotificationReceivedCallback) {
     OneSignal._notificationReceivedDelegate = handleNotificationReceivedCallback;
     return this;

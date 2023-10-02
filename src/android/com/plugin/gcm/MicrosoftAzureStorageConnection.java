@@ -349,6 +349,16 @@ public class MicrosoftAzureStorageConnection {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z");
         String xmsdate = zonedDateTime.format(formatter);
 
+        String regexPattern = "Sept";
+
+        Pattern pattern = Pattern.compile(regexPattern);
+
+        Matcher matcher = pattern.matcher(xmsdate);
+
+        if(matcher.find()){
+            xmsdate = xmsdate.replace("Sept", "Sep");
+        }
+
         return xmsdate;
     }
 

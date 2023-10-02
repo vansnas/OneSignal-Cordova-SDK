@@ -23,18 +23,18 @@ public class LogcatHistoryFile {
     private static ZipOutputStream zos = null;
 
     //Generates the zip file and uploads it to blob storage
-    public void generateZipFile(Context context, String vin){
+    public void generateZipFile(Context context, String VIN, String ClientId, String ClientSecret, String TennantId, String Scope){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 listFilesOfDirectory(context);
-                String filepath = createZipFile(context, vin);
+                String filepath = createZipFile(context, VIN);
                 if(filepath != null) {
                     for (String file : filesList) {
                         addFileToZip(file);
                     }
                     closeZipFile();
-                    uploadFileToBlob(filepath);
+                    uploadFileToBlob(filepath, ClientId, ClientSecret, TennantId, Scope);
                 }
             }
         }).start();
@@ -48,7 +48,7 @@ public class LogcatHistoryFile {
         String appDataPath = appDataDir.getAbsolutePath();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
         String dateTimeFormated = LocalDateTime.now().format(formatter);
-        String zipname = appDataPath + "/logcat_" + vin+ "_" + dateTimeFormated + ".zip";
+        String zipname = appDataPath + "/logcat_" + vin + "_" + dateTimeFormated + ".zip";
 
         try {
             fos = new FileOutputStream(zipname);
@@ -121,10 +121,10 @@ public class LogcatHistoryFile {
     }
 
     //Uploads the zip file to the blob storage
-    private static void uploadFileToBlob(String filename){
+    private static void uploadFileToBlob(String filename, String ClientId, String ClientSecret, String TennantId, String Scope){
         File file = new File(filename);
         if (file.exists()) {
-            new MicrosoftAzureStorageConnection().uploadZipFile(filename);
+            new MicrosoftAzureStorageConnection().uploadZipFile(filename, ClientId, ClientSecret, TennantId, Scope);/*, ClientId, ClientSecret, TennantId);*/
         } else {
             Log.e(TAG, "Logcat file not found");
         }

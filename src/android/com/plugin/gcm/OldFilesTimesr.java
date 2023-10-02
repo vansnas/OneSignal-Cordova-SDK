@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OldFilesTimes extends BroadcastReceiver {
+public class OldFilesTimer extends BroadcastReceiver {
     
     private static List<String> filesList = new ArrayList<>();
 

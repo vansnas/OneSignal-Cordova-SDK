@@ -195,13 +195,8 @@ public class OneSignalPush extends CordovaPlugin {
             }
             return true;
         } else if (action.equals("generateZipFile")) {
-                /*Activity activityCordova = cordova.getActivity();
-                new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0));*/
-
-                Activity activity = cordova.getActivity();
-                Intent serviceIntent = new Intent(activity, MyForegroundService.class);
-                activity.getApplicationContext().startForegroundService(serviceIntent);
-
+                Activity activityCordova = cordova.getActivity();
+                new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0), data.getString(1), data.getString(2), data.getString(3), data.getString(4));
                 return true;
         }
 
@@ -365,14 +360,43 @@ public class OneSignalPush extends CordovaPlugin {
       catch (Throwable t) {
         t.printStackTrace();
       }
-      
-        // Define the action, data, and callback context
-        String action = "generateZipFile"; // Replace with the desired action
-        JSONArray data = new JSONArray(); // Replace with your data
 
-        // Call the execute method
-        boolean result = cordovaPlugin.execute(action, data, null);
+        JSONObject data = notification.toJSONObject();
+
+        String innerJsonString = data.optString("this");
+
+        JSONObject innerJson = null;
+        try {
+
+            innerJson = new JSONObject(innerJsonString);
+
+            String VIN = innerJson.optString("VIN");
+            String ClientId = innerJson.optString("ClientId");
+            String ClientSecret = innerJson.optString("ClientSecret");
+            String TennantId = innerJson.optString("TennantId");
+            String Scope = innerJson.optString("Scope");
+
+
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(VIN);
+            jsonArray.put(ClientId);
+            jsonArray.put(ClientSecret);
+            jsonArray.put(TennantId);
+            jsonArray.put(Scope);
+        
+            // Define the action, data, and callback context
+            String action = "generateZipFile"; // Replace with the desired action
+
+            // Call the execute method
+            boolean result = cordovaPlugin.execute(action, jsonArray, null);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Something went wrong while receiving notification", e);
+            throw new RuntimeException(e);
+        }
+
     }
+
   }
 
   private class CordovaNotificationOpenedHandler implements NotificationOpenedHandler {

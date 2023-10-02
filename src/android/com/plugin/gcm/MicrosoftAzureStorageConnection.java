@@ -24,6 +24,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -37,26 +39,20 @@ public class MicrosoftAzureStorageConnection {
 
     private static final String TAG = "MicrosoftAzureStorageConnection";
     private static final String grantType = "client_credentials";
-    private static String clientId;
-    private static String clientSecret;
-    private static String scope;
-    private static final String tennantId = "0c0d142b-bb72-4eb8-a9c5-49b7cc8466af";
     private static BufferedReader reader;
     private static final int CHUNK_SIZE = 1024 * 1024 * 4;
     private static OkHttpClient client = new OkHttpClient.Builder()
             .build();
 
-    //
-
-    public void uploadZipFile(String filepath){
+    public void uploadZipFile(String filepath, String ClientId, String ClientSecret, String TennantId, String Scope){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 File file = new File(filepath);
                 if (file.exists()) {
-                    String token = getAccessToken();
+                    String token = getAccessToken(ClientId, ClientSecret, TennantId, Scope);
                     String accessBlobToken = processToken(token);
-                    uploadFileResumable(accessBlobToken, file);
+                    uploadFileResumable(accessBlobToken, file, ClientId, ClientSecret, TennantId, Scope);
                 } else {
                     Log.e(TAG, "File " + file.getName() + " not found (upload to Blob storage)");
                 }
@@ -73,7 +69,7 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Action that will upload the file to the blob
-    public static void uploadFileResumable(String bearerToken, File file) {
+    public static void uploadFileResumable(String bearerToken, File file, String ClientId, String ClientSecret, String TennantId, String Scope) {
 
         // Creates a multipart request body
         RequestBody body = new MultipartBody.Builder()
@@ -96,23 +92,23 @@ public class MicrosoftAzureStorageConnection {
             Response response = client.newCall(request).execute();
 
             if (!response.isSuccessful()) {
-                Log.e(TAG, "Error uploading the file, resuming...");
 
                 if (response.code() == 308) {
-                    handle308Status(response, file);
-                } else {
                     Log.e(TAG, "Error uploading the file, resuming...");
-                    handleTimeoutWithRetries(request, file);
+                    handle308Status(response, file, ClientId, ClientSecret, TennantId, Scope);
+                } else {
+                    Log.e(TAG, "Error uploading the file, entering retries...");
+                    handleTimeoutWithRetries(request, file, ClientId, ClientSecret, TennantId, Scope);
                 }
             }
         } catch (IOException e) {
             Log.e(TAG, "Something went wrong during resumable upload", e);
-            handleTimeoutWithRetries(request, file);
+            handleTimeoutWithRetries(request, file, ClientId, ClientSecret, TennantId, Scope);
         }
 
     }
 
-    private static void handleTimeoutWithRetries(Request request, File file) {
+    private static void handleTimeoutWithRetries(Request request, File file, String ClientId, String ClientSecret, String TennantId, String Scope) {
 
         Instant start = Instant.now();  // Get the current time
 
@@ -122,7 +118,7 @@ public class MicrosoftAzureStorageConnection {
 
         while (Instant.now().isBefore(end)) {
             try {
-                request = handle401Status(request);
+                request = handle401Status(request, ClientId, ClientSecret, TennantId, Scope);
                 Response response = client.newCall(request).execute();
 
                 if (response.isSuccessful()) {
@@ -132,7 +128,7 @@ public class MicrosoftAzureStorageConnection {
                     Log.e(TAG, "Retry failed");
                     Thread.sleep(600000);//600000
                     if (response.code() == 401){
-                        request = handle401Status(request);
+                        request = handle401Status(request, ClientId, ClientSecret, TennantId, Scope);
                     }
                 }
             } catch (InterruptedException | IOException e) {
@@ -143,8 +139,8 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Action that handles a 401 response (Authentication failed, token no longer available)
-    private static Request handle401Status(Request request) {
-        String token = getAccessToken();
+    private static Request handle401Status(Request request, String ClientId, String ClientSecret, String TennantId, String Scope) {
+        String token = getAccessToken(ClientId, ClientSecret, TennantId, Scope);
         String accessBlobToken = processToken(token);
         Request.Builder requestBuilder = request.newBuilder();
         requestBuilder.header("Authorization", "Bearer " + accessBlobToken);
@@ -153,7 +149,7 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Actions that handles a 308 response
-    private static void handle308Status(Response response, File file) {
+    private static void handle308Status(Response response, File file, String ClientId, String ClientSecret, String TennantId, String Scope) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .callTimeout(15, TimeUnit.MINUTES)
                 .build();
@@ -171,14 +167,14 @@ public class MicrosoftAzureStorageConnection {
                 RequestBody chunkBody = createChunkRequestBody(file, newStartByte, CHUNK_SIZE);
 
                 // Builds new request with headers for resuming upload
-                Request newRequest = buildRequestWithHeaders(processToken(getAccessToken()), file, newStartByte, file.length() - 1, chunkBody);
+                Request newRequest = buildRequestWithHeaders(processToken(getAccessToken(ClientId, ClientSecret, TennantId, Scope)), file, newStartByte, file.length() - 1, chunkBody);
 
                 Response newResponse = client.newCall(newRequest).execute();
                 if (newResponse.isSuccessful()) {
                     Log.i(TAG, "Upload successful after 308 status");
                 } else {
                     Log.e(TAG, "Error uploading chunk after 308 status");
-                    handleTimeoutWithRetries(newRequest, file);
+                    handleTimeoutWithRetries(newRequest, file, ClientId, ClientSecret, TennantId, Scope);
                 }
             }
         } catch (IOException e) {
@@ -232,19 +228,15 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Action that retrieves the OAuth2.0 access token
-    private static String getAccessToken(){
-        String url = "https://login.microsoftonline.com/" + tennantId + "/oauth2/V2.0/token";
+    private static String getAccessToken(String ClientId, String ClientSecret, String TennantId, String Scope){
+        String url = "https://login.microsoftonline.com/" + TennantId + "/oauth2/V2.0/token";
 
-        clientId = "92c08464-e708-4d91-b5e4-aa97f66cf92c";
-        clientSecret = "b9N8Q~kFBnsPv2vsJmjVjyLvaQbeJJBqUZYaXbgV";
-        scope = "https://stdaflogs.blob.core.windows.net/.default";
-
-        String encodedCredentials = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
+        String encodedCredentials = Base64.getEncoder().encodeToString((ClientId + ":" + ClientSecret).getBytes(StandardCharsets.UTF_8));
 
         // HTTP Connection
         HttpURLConnection connection = connectToHTTP(url, encodedCredentials);
 
-        String parameters = "grant_type=" + grantType + "&scope=" + scope;
+        String parameters = "grant_type=" + grantType + "&scope=" + Scope;
 
         sendRequest(connection, parameters);
         reader = readResponse(connection);

@@ -1,10 +1,10 @@
-var exec = require('cordova/exec');
+/*var exec = require('cordova/exec');
 
 exports.sendLogs = function (success, error) {
     exec(success, error, 'LogCat', 'sendLogs', []);
 };
 
-/**
+*
  * Modified MIT License
  *
  * Copyright 2019 OneSignal

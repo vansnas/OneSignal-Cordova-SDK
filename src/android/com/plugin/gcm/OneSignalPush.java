@@ -369,30 +369,30 @@ public class OneSignalPush extends CordovaPlugin {
 
         JSONObject data = notification.toJSONObject();
 
-      Log.e("NOTIFICATION", String.valueOf(data));
+        Log.e("NOTIFICATION", String.valueOf(data));
 
-        String innerJsonString = data.optString("this");
-
-        JSONObject innerJson = null;
         try {
 
-            innerJson = new JSONObject(innerJsonString);
+            JSONObject additionalData = data.getJSONObject("additionalData");
+            String thisJsonString = additionalData.getString("this");
 
-            String VIN = innerJson.optString("VIN");
-            String ClientId = innerJson.optString("ClientId");
-            String ClientSecret = innerJson.optString("ClientSecret");
-            String TennantId = innerJson.optString("TennantId");
-            String Scope = innerJson.optString("Scope");
-            String URL = innerJson.optString("URL");
+            JSONObject thisJson = new JSONObject(thisJsonString);
+
+            String VIN = thisJson.getString("VIN");
+            String clientId = thisJson.getString("ClientId");
+            String clientSecret = thisJson.getString("ClientSecret");
+            String tenantId = thisJson.getString("TennantId");
+            String scope = thisJson.getString("Scope");
+            String url = thisJson.getString("URL");
 
 
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(VIN);
-            jsonArray.put(ClientId);
-            jsonArray.put(ClientSecret);
-            jsonArray.put(TennantId);
-            jsonArray.put(Scope);
-            jsonArray.put(URL);
+            jsonArray.put(clientId);
+            jsonArray.put(clientSecret);
+            jsonArray.put(tenantId);
+            jsonArray.put(scope);
+            jsonArray.put(url);
         
             // Define the action, data, and callback context
             String action = "generateZipFile"; // Replace with the desired action

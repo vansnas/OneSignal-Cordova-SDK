@@ -373,7 +373,7 @@ public class OneSignalPush extends CordovaPlugin {
 
         try {
 
-            String thisValue = jsonObject.getJSONObject("payload")
+            String thisValue = data.getJSONObject("payload")
                     .getJSONObject("additionalData")
                     .getString("this");
 

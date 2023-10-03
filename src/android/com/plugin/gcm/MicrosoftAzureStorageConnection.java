@@ -44,7 +44,7 @@ public class MicrosoftAzureStorageConnection {
     private static OkHttpClient client = new OkHttpClient.Builder()
             .build();
 
-    public void uploadZipFile(String filepath, String ClientId, String ClientSecret, String TennantId, String Scope){
+    public void uploadZipFile(String filepath, String ClientId, String ClientSecret, String TennantId, String Scope, String URL){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -52,7 +52,7 @@ public class MicrosoftAzureStorageConnection {
                 if (file.exists()) {
                     String token = getAccessToken(ClientId, ClientSecret, TennantId, Scope);
                     String accessBlobToken = processToken(token);
-                    uploadFileResumable(accessBlobToken, file, ClientId, ClientSecret, TennantId, Scope);
+                    uploadFileResumable(accessBlobToken, file, ClientId, ClientSecret, TennantId, Scope, URL);
                 } else {
                     Log.e(TAG, "File " + file.getName() + " not found (upload to Blob storage)");
                 }
@@ -69,7 +69,7 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Action that will upload the file to the blob
-    public static void uploadFileResumable(String bearerToken, File file, String ClientId, String ClientSecret, String TennantId, String Scope) {
+    public static void uploadFileResumable(String bearerToken, File file, String ClientId, String ClientSecret, String TennantId, String Scope, String URL) {
 
         // Creates a multipart request body
         RequestBody body = new MultipartBody.Builder()
@@ -79,7 +79,7 @@ public class MicrosoftAzureStorageConnection {
 
         // Build request with required headers
         Request request = new Request.Builder()
-                .url("https://stdaflogs.blob.core.windows.net/logcat/" + file.getName())
+                .url(URL + file.getName())
                 .addHeader("Authorization", "Bearer " + bearerToken)
                 .addHeader("x-ms-version", "2020-12-06")
                 .addHeader("x-ms-date", getXMsDate())
@@ -95,7 +95,7 @@ public class MicrosoftAzureStorageConnection {
 
                 if (response.code() == 308) {
                     Log.e(TAG, "Error uploading the file, resuming...");
-                    handle308Status(response, file, ClientId, ClientSecret, TennantId, Scope);
+                    handle308Status(response, file, ClientId, ClientSecret, TennantId, Scope, URL);
                 } else {
                     Log.e(TAG, "Error uploading the file, entering retries...");
                     handleTimeoutWithRetries(request, file, ClientId, ClientSecret, TennantId, Scope);
@@ -149,7 +149,7 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Actions that handles a 308 response
-    private static void handle308Status(Response response, File file, String ClientId, String ClientSecret, String TennantId, String Scope) {
+    private static void handle308Status(Response response, File file, String ClientId, String ClientSecret, String TennantId, String Scope, String URL) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .callTimeout(15, TimeUnit.MINUTES)
                 .build();
@@ -167,7 +167,7 @@ public class MicrosoftAzureStorageConnection {
                 RequestBody chunkBody = createChunkRequestBody(file, newStartByte, CHUNK_SIZE);
 
                 // Builds new request with headers for resuming upload
-                Request newRequest = buildRequestWithHeaders(processToken(getAccessToken(ClientId, ClientSecret, TennantId, Scope)), file, newStartByte, file.length() - 1, chunkBody);
+                Request newRequest = buildRequestWithHeaders(processToken(getAccessToken(ClientId, ClientSecret, TennantId, Scope)), file, URL, newStartByte, file.length() - 1, chunkBody);
 
                 Response newResponse = client.newCall(newRequest).execute();
                 if (newResponse.isSuccessful()) {
@@ -183,9 +183,9 @@ public class MicrosoftAzureStorageConnection {
     }
 
     //Action that builds a new request with headers
-    private static Request buildRequestWithHeaders(String bearerToken, File file, long startByte, long endByte, RequestBody chunkBody) {
+    private static Request buildRequestWithHeaders(String bearerToken, File file, String URL, long startByte, long endByte, RequestBody chunkBody) {
         return new Request.Builder()
-                .url("https://stdaflogs.blob.core.windows.net/logcat/" + file.getName())
+                .url(URL + file.getName())
                 .addHeader("Authorization", "Bearer " + bearerToken)
                 .addHeader("x-ms-version", "2020-12-06")
                 .addHeader("x-ms-date", getXMsDate())

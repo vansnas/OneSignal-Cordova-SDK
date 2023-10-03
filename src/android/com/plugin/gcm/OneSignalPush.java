@@ -197,7 +197,7 @@ public class OneSignalPush extends CordovaPlugin {
         } else if (action.equals("generateZipFile")) {
                 Activity activityCordova = cordova.getActivity();
                 try {
-                  new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0), data.getString(1), data.getString(2), data.getString(3), data.getString(4));
+                  new LogcatHistoryFile().generateZipFile(activityCordova, data.getString(0), data.getString(1), data.getString(2), data.getString(3), data.getString(4), data.getString(5));
                 } catch (JSONException e) {
                   Log.e(TAG, "Something went wrong while generating the Zip file after receiving the notification...", e);
                   e.printStackTrace(); // This is just an example; choose the appropriate error handling.

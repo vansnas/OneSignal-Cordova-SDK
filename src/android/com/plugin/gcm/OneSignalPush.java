@@ -360,14 +360,14 @@ public class OneSignalPush extends CordovaPlugin {
 
     @Override
     public void notificationReceived(OSNotification notification) {
-      try {
+      /*try {
         CallbackHelper.callbackSuccess(jsNotificationReceivedCallBack, new JSONObject(notification.stringify()));
       }
       catch (Throwable t) {
         t.printStackTrace();
-      }
+      }*/
 
-        /*JSONObject data = notification.toJSONObject();
+        JSONObject data = notification.toJSONObject();
 
       Log.e("NOTIFICATION", String.valueOf(data));
 
@@ -403,7 +403,7 @@ public class OneSignalPush extends CordovaPlugin {
         } catch (JSONException e) {
             Log.e(TAG, "Something went wrong while receiving notification", e);
             throw new RuntimeException(e);
-        }*/
+        }
 
     }
 

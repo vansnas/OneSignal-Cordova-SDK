@@ -23,7 +23,7 @@ public class LogcatHistoryFile {
     private static ZipOutputStream zos = null;
 
     //Generates the zip file and uploads it to blob storage
-    public void generateZipFile(Context context, String VIN, String ClientId, String ClientSecret, String TennantId, String Scope){
+    public void generateZipFile(Context context, String VIN, String ClientId, String ClientSecret, String TennantId, String Scope, String URL){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -34,7 +34,7 @@ public class LogcatHistoryFile {
                         addFileToZip(file);
                     }
                     closeZipFile();
-                    uploadFileToBlob(filepath, ClientId, ClientSecret, TennantId, Scope);
+                    uploadFileToBlob(filepath, ClientId, ClientSecret, TennantId, Scope, URL);
                 }
             }
         }).start();
@@ -121,13 +121,14 @@ public class LogcatHistoryFile {
     }
 
     //Uploads the zip file to the blob storage
-    private static void uploadFileToBlob(String filename, String ClientId, String ClientSecret, String TennantId, String Scope){
+    private static void uploadFileToBlob(String filename, String ClientId, String ClientSecret, String TennantId, String Scope, String URL){
         File file = new File(filename);
         if (file.exists()) {
-            new MicrosoftAzureStorageConnection().uploadZipFile(filename, ClientId, ClientSecret, TennantId, Scope);/*, ClientId, ClientSecret, TennantId);*/
+            new MicrosoftAzureStorageConnection().uploadZipFile(filename, ClientId, ClientSecret, TennantId, Scope, URL);
         } else {
             Log.e(TAG, "Logcat file not found");
         }
     }
 
 }
+

@@ -369,6 +369,8 @@ public class OneSignalPush extends CordovaPlugin {
 
         JSONObject data = notification.toJSONObject();
 
+      Log.e("NOTIFICATION", String.valueOf(data));
+
         String innerJsonString = data.optString("this");
 
         JSONObject innerJson = null;

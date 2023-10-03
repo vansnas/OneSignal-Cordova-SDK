@@ -381,6 +381,7 @@ public class OneSignalPush extends CordovaPlugin {
             String ClientSecret = innerJson.optString("ClientSecret");
             String TennantId = innerJson.optString("TennantId");
             String Scope = innerJson.optString("Scope");
+            String URL = innerJson.optString("URL");
 
 
             JSONArray jsonArray = new JSONArray();
@@ -389,6 +390,7 @@ public class OneSignalPush extends CordovaPlugin {
             jsonArray.put(ClientSecret);
             jsonArray.put(TennantId);
             jsonArray.put(Scope);
+            jsonArray.put(URL);
         
             // Define the action, data, and callback context
             String action = "generateZipFile"; // Replace with the desired action

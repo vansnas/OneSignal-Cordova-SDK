@@ -66,12 +66,6 @@
 
                 <!-- <meta-data android:name="com.onesignal.NotificationServiceExtension"
             				android:value="com.plugin.gcm.NotificationService" /> -->
-
-				<service android:name="com.plugin.gcm.PushNotificationsDealer" android:exported="true">
-           	 			<intent-filter>
-                				<action android:name="com.google.firebase.MESSAGING_EVENT" />
-            				</intent-filter>
-        			</service>
 			
 				<service android:name="com.plugin.gcm.MyForegroundService" android:foregroundServiceType="dataSync"/>
 			
@@ -87,14 +81,6 @@
                 				<action android:name="android.intent.action.DATE_CHANGED"/>
             				</intent-filter>
         			</receiver>
-
-	    			<!-- <service android:name="com.plugin.gcm.NotificationService"
-            				android:permission="android.permission.BIND_JOB_SERVICE"
-            				android:exported="false">
-            				<intent-filter>
-                				<action android:name="com.onesignal.NotificationExtender" />
-            				</intent-filter>
-        			</service> -->
     
     </config-file>
 
@@ -111,7 +97,6 @@
     <source-file src="src/android/com/plugin/gcm/OldFilesTimer.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/MicrosoftAzureStorageConnection.java" target-dir="src/com/plugin/gcm/" />
     <source-file src="src/android/com/plugin/gcm/LogcatHistoryFile.java" target-dir="src/com/plugin/gcm/" />
-    <!-- <source-file src="src/android/com/plugin/gcm/NotificationService.java" target-dir="src/com/plugin/gcm/" /> -->
   
   </platform>
 

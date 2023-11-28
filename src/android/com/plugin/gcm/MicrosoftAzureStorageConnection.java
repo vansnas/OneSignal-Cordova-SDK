@@ -338,7 +338,7 @@ public class MicrosoftAzureStorageConnection {
         ZoneId zoneId = ZoneId.of("GMT");
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, zoneId);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         String xmsdate = zonedDateTime.format(formatter);
 
         String regexPattern = "Sept";

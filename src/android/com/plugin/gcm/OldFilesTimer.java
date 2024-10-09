@@ -17,16 +17,18 @@ public class OldFilesTimer extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) { //check on documentation if allows being in AM
-            deleteOldFiles(context);
+        if (Intent.ACTION_DATE_CHANGED.equals(intent.getAction())) {
+            // Execute file deletion on a background thread
+            new Thread(() -> deleteOldFiles(context)).start();
         }
     }
 
-    //Deletes the old files
-    public static void deleteOldFiles(Context context){
+    public static void deleteOldFiles(Context context) {
         listFilesOfDirectory(context);
-        for(String filename: filesList){
-            deleteFile(filename);
+        for (String filename : filesList) {
+            if (!deleteFile(filename)) {
+                Log.e("OldFilesTimer", "Failed to delete file: " + filename);
+            }
         }
     }
 
@@ -45,12 +47,10 @@ public class OldFilesTimer extends BroadcastReceiver {
     }
 
     //Deletes the given file
-    private static void deleteFile(String filename){
+    private static boolean deleteFile(String filename) {
         File file = new File(filename);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
+        return file.exists() && file.delete();
+}
 
     //Filters the list of files and add the respective ones to the list
     private static void filterFiles(File file, Context context){

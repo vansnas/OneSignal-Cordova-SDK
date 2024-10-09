@@ -46,43 +46,64 @@ public class MyForegroundService extends Service {
             public void run() {
                 try {
                     while (true) {
-
-                        //Checks if the logcat process is alive. If not, will start it and the respective reader
                         if (reader == null || !isProcessAlive(process)) {
                             process = startLogcatProcess();
                             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         }
 
-                        //Create the log file and initializes the writer
                         logFile = generateLogFile();
-                        writer = new BufferedWriter(new FileWriter(logFile));
-
-                        readLinesFromLog();
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
+                            readLinesFromLog(writer);
+                        }
 
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Error starting logcat process", e);
                 } finally {
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (IOException e) {
-                            Log.e(TAG, "Failed to close reader", e);
-                        }
-                        reader = null;
-                    }
-
-                    //read the documentation to close process (include inside if)
-                    //to test, look to the number of threads and check if it increases
-                    if(process != null) {
-                        process.destroy();
-                        process = null;
-                    }
-
+                    cleanupResources();
                 }
             }
         }).start();
         super.onCreate();
+    }
+
+    private void cleanupResources() {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to close reader", e);
+            }
+            reader = null;
+        }
+
+        if (process != null) {
+            process.destroy();
+            process = null;
+        }
+    }
+
+    private void readLinesFromLog(BufferedWriter writer) throws IOException {
+        String line;
+        int countLines = 0;
+
+        while ((line = reader.readLine()) != null) {
+            if (!isCurrentLogFile(logFile)) {
+                writer.close();
+                logFile = generateLogFile();
+                writer = new BufferedWriter(new FileWriter(logFile));
+            }
+
+            writeLineToLog(writer, line);
+            countLines++;
+            logNumberOflines(countLines);
+        }
+    }
+
+    private void writeLineToLog(BufferedWriter writer, String line) throws IOException {
+        writer.write(line);
+        writer.newLine();
+        writer.flush();
     }
 
     @Override

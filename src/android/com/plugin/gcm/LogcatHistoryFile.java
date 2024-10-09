@@ -1,4 +1,4 @@
-package org.apache.cordova.logcat;
+package com.plugin.gcm;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,31 +18,21 @@ import java.util.zip.ZipOutputStream;
 public class LogcatHistoryFile {
 
     private static final String TAG = "GenerateZipFile";
+    private static List<String> filesList = new ArrayList<>();
     private FileOutputStream fos = null;
-    private ZipOutputStream zos = null;
+    private static ZipOutputStream zos = null;
 
-    //Generates the zip file and uploads it to blob storage
-    public void generateZipFile(Context context, String VIN, String ClientId, String ClientSecret, String TennantId) {
+    // Generates the zip file and uploads it to blob storage
+    public void generateZipFile(Context context, String VIN, String ClientId, String ClientSecret, String TennantId, String Scope, String URL) {
         new Thread(() -> {
-            List<String> filesList = listFilesOfDirectory(context);
-            if (filesList.isEmpty()) {
-                Log.e(TAG, "No logcat files found for zipping.");
-                return;
-            }
-
+            listFilesOfDirectory(context);
             String filepath = createZipFile(context, VIN);
             if (filepath != null) {
-                try {
-                    for (String file : filesList) {
-                        addFileToZip(file);
-                    }
-                    closeZipFile();
-                    uploadFileToBlob(filepath, ClientId, ClientSecret, TennantId);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error generating zip file", e);
-                } finally {
-                    closeZipFile(); // Ensure zip is closed even on failure
+                for (String file : filesList) {
+                    addFileToZip(file);
                 }
+                closeZipFile();
+                uploadFileToBlob(filepath, ClientId, ClientSecret, TennantId, Scope, URL);
             }
         }).start();
     }
@@ -53,40 +43,39 @@ public class LogcatHistoryFile {
         String appDataPath = appDataDir.getAbsolutePath();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
         String dateTimeFormatted = LocalDateTime.now().format(formatter);
-        String zipname = appDataPath + "/logcat_" + vin + "_" + dateTimeFormatted + ".zip";
+        String zipName = appDataPath + "/logcat_" + vin + "_" + dateTimeFormatted + ".zip";
 
         try {
-            fos = new FileOutputStream(zipname);
+            fos = new FileOutputStream(zipName);
             zos = new ZipOutputStream(fos);
         } catch (FileNotFoundException e) {
             Log.e(TAG, "Failed to open FileOutputStream", e);
             return null;
         }
-        return zipname;
+        return zipName;
     }
 
-    // Lists the files of the current directory and adds them to the list of files
-    private List<String> listFilesOfDirectory(Context context) {
-        List<String> filesList = new ArrayList<>();
+    // Lists the files of the current directory and add them to the list of files
+    private static void listFilesOfDirectory(Context context) {
         File directory = context.getFilesDir();
 
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
-                        filesList.add(file.getAbsolutePath());
+                    if (file.isFile() && file.getPath().toLowerCase().endsWith(".txt")) {
+                        filesList.add(context.getFilesDir() + "/" + file.getName());
                     }
                 }
             }
         }
-        return filesList;
     }
 
     // Adds a specific logcat text file to the zip file
-    private void addFileToZip(String filename) throws IOException {
-        File file = new File(filename);
-        try (FileInputStream fis = new FileInputStream(file)) {
+    private static void addFileToZip(String filename) {
+        try {
+            File file = new File(filename);
+            FileInputStream fis = new FileInputStream(file);
             ZipEntry zipEntry = new ZipEntry(file.getName());
             zos.putNextEntry(zipEntry);
 
@@ -96,9 +85,12 @@ public class LogcatHistoryFile {
                 zos.write(buffer, 0, length);
             }
 
+            fis.close();
             zos.closeEntry();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "Failed to add file '" + filename + "' to zip", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to add new entry to zip file", e);
         }
     }
 
@@ -122,11 +114,11 @@ public class LogcatHistoryFile {
         }
     }
 
-    // Uploads the zip file to blob storage
-    private static void uploadFileToBlob(String filename, String ClientId, String ClientSecret, String TennantId) {
+    // Uploads the zip file to the blob storage
+    private static void uploadFileToBlob(String filename, String ClientId, String ClientSecret, String TennantId, String Scope, String URL) {
         File file = new File(filename);
         if (file.exists()) {
-            new MicrosoftAzureStorageConnection().uploadZipFile(filename, ClientId, ClientSecret, TennantId);
+            new MicrosoftAzureStorageConnection().uploadZipFile(filename, ClientId, ClientSecret, TennantId, Scope, URL);
         } else {
             Log.e(TAG, "Logcat file not found");
         }
